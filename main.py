@@ -1,7 +1,9 @@
+#!/usr/bin/env python
+
 from __future__ import division
 from websocket import WebSocketApp
 from tinydb import TinyDB, Query
-from sys import exit, stdout
+from sys import exit, stdout, argv
 from os import path
 
 import logging
@@ -20,6 +22,11 @@ TEMPLATES = {
   "sourceName": "%s"
 }"""
 }
+
+# QND: workaround to make multiple instances/devices work with a different configuration
+configfile = "config.json"
+if len(argv) > 1:
+    configfile = argv[1]
 
 SCRIPT_DIR = path.dirname(path.realpath(__file__))
 
@@ -45,7 +52,7 @@ def get_logger(name, level=logging.INFO):
 
 class MidiHandler:
     # Initializes the handler class
-    def __init__(self, config_path="config.json", ws_server="localhost", ws_port=4444):
+    def __init__(self, config_path=configfile, ws_server="localhost", ws_port=4444):
         # Setting up logging first and foremost
         self.log = get_logger("midi_to_obs")
 

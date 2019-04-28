@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import mido, threading, sys, atexit, json, time
 from tinydb import TinyDB, Query
 from websocket import create_connection
@@ -7,7 +8,12 @@ serverIP = "localhost"
 serverPort = "4444"
 ####
 
-db = TinyDB("config.json", indent=4)
+# QND: workaround to make multiple instances/devices work with a different configuration
+configfile = "config.json"
+if len(sys.argv) > 1:
+    configfile = sys.argv[1]
+
+db = TinyDB(configfile, indent=4)
 buttonActions = ["SetCurrentScene", "SetPreviewScene", "TransitionToProgram", "SetCurrentTransition", "SetSourceVisibility", "ToggleSourceVisibility", "ToggleMute", "SetMute",
                  "StartStopStreaming", "StartStreaming", "StopStreaming", "StartStopRecording", "StartRecording", "StopRecording", "StartStopReplayBuffer",
                  "StartReplayBuffer", "StopReplayBuffer", "SaveReplayBuffer", "SetTransitionDuration", "SetCurrentProfile","SetCurrentSceneCollection",
